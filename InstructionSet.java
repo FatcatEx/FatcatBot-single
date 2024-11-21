@@ -1,5 +1,4 @@
-/*****   學號：413226178、413226271         *****/
-/*****   姓名：楊茗翔、簡稔祖         *****/
+
 
 
 public class InstructionSet {
@@ -78,11 +77,12 @@ public class InstructionSet {
              
              case 8 -> {
                  System.out.println("21點遊戲即將開始...");
-                 
+                 new Blackjack().play();
              }
              
              case 9 -> {
                 System.out.println("德州撲克遊戲即將開始...");
+                new Texas().play();
              }
              
              case 10 -> {
