@@ -1,26 +1,28 @@
-
+/*****   學號：413226178、413226271         *****/
+/*****   姓名：楊茗翔、簡稔祖         *****/
 
 
 public class InstructionSet {
     public String[] Instruction = {
         ".r",
         ".rr",
-        ".create note",
-        ".delete note",
+        ".cnote",
+        ".dnote",
         ".note",
-        ".create room",
-        ".join room",
-        ".exit room",
+        ".jroom",
+        ".eroom",
         ".blackjack",
         ".texas",
-        ".help"
+        ".help",
+        ".ctimer",
+        ".dtimer"
     };
  
     public String[] HelpIntrodution = {
         "擲骰指令 .rx (x為骰子面數，例如 .r6 將生成1-6之間的隨機數)",
         "輪盤指令 .rrx#y#z (x, y, z為事件名，例如 .rr吃飯#睡覺#玩遊戲)",
-        "新建記事本 .create note (創建一個新的記事本)",
-        "刪除記事本 .delete note (刪除現有記事本)",
+        "新建記事本 .cnote (創建一個新的記事本)",
+        "刪除記事本 .dnote (刪除現有記事本)",
         "查看記事本 .note (顯示當前所有記事內容)",
         "創建遊戲房間 .create room (建立新的遊戲房間)",
         "加入遊戲房間 .join room (加入指定的遊戲房間)",
@@ -30,8 +32,8 @@ public class InstructionSet {
         "查詢指令集 .help (顯示所有可用指令的詳細說明)"
     };
  
-    private RandomGenerator randomGenerator = new RandomGenerator();
-    
+    private final RandomGenerator randomGenerator = new RandomGenerator();
+    private final Note note = new Note();
  
     public void ReceiveInstruction(String message) {
          int function = -1;
@@ -41,26 +43,34 @@ public class InstructionSet {
                  function = i;
              }
          }
- 
+         System.out.println(function);
          switch (function) {
              case 0 -> {
-                 String result = randomGenerator.Roll(message);
-                 System.out.println(" 擲骰結果：" + result);
+                Thread vt = Thread.startVirtualThread(() -> {
+                    System.out.println("Start virtual thread...");
+                    System.out.println(" 擲骰結果：" + randomGenerator.Roll(message));
+                    System.out.println("End virtual thread.");
+                });
              }
              case 1 -> {
-                 String decision = randomGenerator.weightedRandomSelection(message);
-                 System.out.println(" 輪盤結果：" + decision);
+                Thread vt = Thread.startVirtualThread(() -> {
+                    System.out.println("Start virtual thread...");
+                    System.out.println(" 輪盤結果：" + randomGenerator.weightedRandomSelection(message));
+                    System.out.println("End virtual thread.");
+                });
              }
              case 2 -> {
-
+                Thread vt = Thread.startVirtualThread(() -> {
+                    System.out.println(note.CreateTXT());
+                });
              }
              
              case 3 -> {
-             
+                System.out.println(note.DeleteTXT());
              }
              
              case 4 -> {
-             
+                System.out.println(note.ReadTXT());
              }
              
              case 5 -> {
@@ -72,25 +82,22 @@ public class InstructionSet {
              }
              
              case 7 -> {
-             
+                System.out.println("21點遊戲即將開始...");
              }
              
              case 8 -> {
-                 System.out.println("21點遊戲即將開始...");
-                 new Blackjack().play();
+                System.out.println("德州撲克遊戲即將開始...");
+                 
              }
              
              case 9 -> {
-                System.out.println("德州撲克遊戲即將開始...");
-                new Texas().play();
-             }
-             
-             case 10 -> {
-                 System.out.println("请使用以下指令操作Bot:");
+                System.out.println("请使用以下指令操作Bot:");
                  for (String intro : HelpIntrodution) {
                      System.out.println(intro);
                  }
              }
+             
+
              default -> System.out.println(" 無效指令，請使用 .help 查看可用指令。");
          }
      }
