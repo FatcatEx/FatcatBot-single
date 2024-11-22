@@ -24,9 +24,8 @@ public class InstructionSet {
         "新建記事本 .cnote (創建一個新的記事本)",
         "刪除記事本 .dnote (刪除現有記事本)",
         "查看記事本 .note (顯示當前所有記事內容)",
-        "創建遊戲房間 .create room (建立新的遊戲房間)",
-        "加入遊戲房間 .join room (加入指定的遊戲房間)",
-        "離開遊戲房間 .exit room (退出當前遊戲房間)",
+        "加入遊戲房間 .jroom (加入指定的遊戲房間)",
+        "離開遊戲房間 .eroom (退出當前遊戲房間)",
         "開始21點 (需要在房間內) .blackjack",
         "開始德州撲克 (需要在房間內) .texas",
         "查詢指令集 .help (顯示所有可用指令的詳細說明)"
@@ -37,6 +36,7 @@ public class InstructionSet {
  
     public void ReceiveInstruction(String message) {
          int function = -1;
+         
  
          for (int i = 0; i < Instruction.length; i++) {
              if (message.startsWith(Instruction[i])) {
