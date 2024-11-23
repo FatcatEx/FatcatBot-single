@@ -1,3 +1,6 @@
+/*****   學號：413226178、413226271         *****/
+/*****   姓名：楊茗翔、簡稔祖         *****/
+
 public class PokerCard {
     private String suit;  // 撲克牌花色
     private int value;    // 撲克牌數值
