@@ -1,6 +1,7 @@
 /*****   學號：413226178、413226271         *****/
 /*****   姓名：楊茗翔、簡稔祖         *****/
 
+import java.io.IOException;
 
 public class InstructionSet {
     public String[] Instruction = {
@@ -14,8 +15,7 @@ public class InstructionSet {
         ".blackjack",
         ".texas",
         ".help",
-        ".ctimer",
-        ".dtimer"
+        ".calarm"
     };
  
     public String[] HelpIntrodution = {
@@ -23,16 +23,22 @@ public class InstructionSet {
         "輪盤指令 .rrx#y#z (x, y, z為事件名，例如 .rr吃飯#睡覺#玩遊戲)",
         "新建記事本 .cnote (創建一個新的記事本)",
         "刪除記事本 .dnote (刪除現有記事本)",
-        "查看記事本 .note (顯示當前所有記事內容)",
+        "查看記事本 .note (顯示指定記事內容)",
         "加入遊戲房間 .jroom (加入指定的遊戲房間)",
         "離開遊戲房間 .eroom (退出當前遊戲房間)",
         "開始21點 (需要在房間內) .blackjack",
         "開始德州撲克 (需要在房間內) .texas",
-        "查詢指令集 .help (顯示所有可用指令的詳細說明)"
+        "查詢指令集 .help (顯示所有可用指令的詳細說明)",
+        "新建鬧鐘 .calarm (新建一個鬧鐘)",
     };
  
     private final RandomGenerator randomGenerator = new RandomGenerator();
     private final Note note = new Note();
+    private final Alarm alarm = new Alarm();
+
+    public void botSet() throws IOException{
+        alarm.setAlarm();
+    }
  
     public void ReceiveInstruction(String message) {
          int function = -1;
@@ -43,7 +49,6 @@ public class InstructionSet {
                  function = i;
              }
          }
-         System.out.println(function);
          switch (function) {
              case 0 -> {
                 System.out.println(" 擲骰結果：" + randomGenerator.Roll(message));
@@ -86,6 +91,10 @@ public class InstructionSet {
                  for (String intro : HelpIntrodution) {
                      System.out.println(intro);
                  }
+             }
+
+             case 10 -> {
+                new Alarm().CreateAlarm();
              }
              
 
