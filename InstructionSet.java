@@ -1,8 +1,8 @@
 /*****   學號：413226178、413226271         *****/
 /*****   姓名：楊茗翔、簡稔祖         *****/
 
-import java.util.Scanner;
 import java.io.IOException;
+import java.util.Scanner;
 
 
 public class InstructionSet {
@@ -17,7 +17,8 @@ public class InstructionSet {
         ".blackjack",
         ".texas",
         ".help",
-        ".calarm"
+        ".calarm",
+        ".botoff"
     };
  
     public String[] HelpIntrodution = {
@@ -31,13 +32,14 @@ public class InstructionSet {
         "開始21點 (需要在房間內) .blackjack",
         "開始德州撲克 (需要在房間內) .texas",
         "查詢指令集 .help (顯示所有可用指令的詳細說明)",
-        "新建鬧鐘 .calarm (新建一個鬧鐘)"
+        "新建鬧鐘 .calarm (新建一個鬧鐘)",
+        "關閉機器人 .botoff (關閉程序)"
     };
  
     private final RandomGenerator randomGenerator = new RandomGenerator();
     private final Note note = new Note();
     private final GameRoom gameRoom = new GameRoom();
-    private final Alarm alarm = new Alarm();
+    private final Alarm alarm = new Note();
 
     public void botSet() throws IOException{
         alarm.setAlarm();
@@ -105,6 +107,10 @@ public class InstructionSet {
 
             case 10 -> {
                 new Alarm().CreateAlarm();
+            }
+
+            case 11 ->{
+                System.exit(0);
             }
             
             default -> System.out.println(" 無效指令，請使用 .help 查看可用指令。");

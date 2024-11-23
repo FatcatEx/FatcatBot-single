@@ -2,6 +2,7 @@
 /*****   姓名：楊茗翔、簡稔祖         *****/
 
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class LineBot extends InstructionSet {
@@ -9,6 +10,10 @@ public class LineBot extends InstructionSet {
         System.out.println("歡迎使用 LineBot 系統!");
         LineBot linebot = new LineBot();
         boolean botRun = true;
+        try {
+            linebot.botSet();
+        } catch (IOException e) {
+        }
 
         while (botRun) {
             linebot.handleInputEvent();

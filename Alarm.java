@@ -102,7 +102,7 @@ public class Alarm {
            break;
         }
      }
-        System.out.println("请输入闹钟时间 (格式: yyyy/MM/dd HH:mm)：");
+        System.out.println("請輸入鬧鐘時間 (格式: yyyy/MM/dd HH:mm)：");
         String inputTime = scanner.nextLine();
         LocalDateTime alarmTime = LocalDateTime.parse(inputTime, formatter);
         LocalDateTime now = LocalDateTime.now();
