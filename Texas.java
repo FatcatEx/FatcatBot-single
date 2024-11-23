@@ -100,8 +100,14 @@ public class Texas {
 
         while (iterator.hasNext()) {
             String player = iterator.next();
-            System.out.println("\n" + player + " 的籌碼：" + playerChips.get(player));
+
+            // 顯示當前玩家的手牌資訊
+            System.out.println("\n" + player + " 的回合！");
+            System.out.println("你的手牌是：" + playerHands.get(player));
+            System.out.println("你的籌碼：" + playerChips.get(player));
             System.out.println("當前總彩金：" + pot);
+
+            // 玩家選擇行動
             System.out.println(player + "，請選擇：(1) 跟注 / (2) 加注 / (3) 蓋牌");
             int choice = scanner.nextInt();
 
@@ -120,12 +126,13 @@ public class Texas {
                 }
                 case 3 -> {
                     System.out.println(player + " 選擇了蓋牌。");
-                    iterator.remove();
+                    iterator.remove(); // 玩家放棄遊戲
                 }
                 default -> System.out.println("無效的選擇，跳過此玩家。");
             }
         }
     }
+
 
     // 計算手牌分數
     private int calculateScore(List<PokerCard> hand) {
@@ -156,6 +163,8 @@ public class Texas {
         playerChips.put(winner, playerChips.get(winner) + pot);
         System.out.println(winner + " 獲得彩金：" + pot);
     }
+
+    
 
     // 主流程
     public void play() {
