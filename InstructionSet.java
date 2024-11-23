@@ -54,7 +54,7 @@ public class InstructionSet {
                  function = i;
              }
          }
-         System.out.println(function);
+         
          switch (function) {
              case 0 -> {
                 System.out.println(" 擲骰結果：" + randomGenerator.Roll(message));
