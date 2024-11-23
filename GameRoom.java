@@ -69,29 +69,3 @@ public class GameRoom {
     }
 }
 
-// 示例遊戲類，這裡可拓展 Blackjack 和 Texas 的多人版本
-class MultiplayerBlackjack {
-    private final List<String> players;
-
-    public MultiplayerBlackjack(List<String> players) {
-        this.players = players;
-    }
-
-    public void play() {
-        System.out.println("Blackjack 遊戲啟動，參與玩家：" + players);
-        // 這裡添加多人遊戲的邏輯
-    }
-}
-
-class MultiplayerTexas {
-    private final List<String> players;
-
-    public MultiplayerTexas(List<String> players) {
-        this.players = players;
-    }
-
-    public void play() {
-        System.out.println("Texas 遊戲啟動，參與玩家：" + players);
-        // 這裡添加多人遊戲的邏輯
-    }
-}
