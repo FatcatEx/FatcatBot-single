@@ -1,3 +1,7 @@
+/*****   學號：413226178、413226271         *****/
+/*****   姓名：楊茗翔、簡稔祖         *****/
+
+
 import java.util.*;
 
 public abstract class CardGame {

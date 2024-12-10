@@ -1,3 +1,7 @@
+/*****   學號：413226178、413226271         *****/
+/*****   姓名：楊茗翔、簡稔祖         *****/
+
+
 import java.util.*;
 
 public class Texas extends CardGame {
@@ -5,7 +9,6 @@ public class Texas extends CardGame {
     private final List<PokerCard> communityCards; // 公共牌
     private final Map<String, Integer> playerChips; // 玩家籌碼
     private int pot; // 獎池
-    private int dealerIndex; // 莊家位置
     private static final int smallBlind = 50; // 小盲注
     private static final int bigBlind = 100; // 大盲注
 
@@ -15,7 +18,6 @@ public class Texas extends CardGame {
         this.communityCards = new ArrayList<>();
         this.playerChips = new HashMap<>();
         this.pot = 0;
-        this.dealerIndex = 0;
 
         // 初始化玩家籌碼
         for (String player : players) {
@@ -41,8 +43,10 @@ public class Texas extends CardGame {
 
         if (communityCards.size() == 0) {
             dealCommunityCards(3); // 翻牌圈
-        } else if (communityCards.size() < 5) {
-            dealCommunityCards(1); // 轉牌或河牌
+        } else if (communityCards.size() == 3) {
+            dealCommunityCards(1); // 轉牌
+        } else if (communityCards.size() == 4) {
+            dealCommunityCards(1); // 河牌
         }
     }
 
@@ -59,14 +63,16 @@ public class Texas extends CardGame {
         Map<String, Integer> scores = new HashMap<>();
 
         for (String player : players) {
-            List<PokerCard> allCards = new ArrayList<>(playerHands.get(player));
-            allCards.addAll(communityCards);
-            int score = calculateScore(allCards);
-            scores.put(player, score);
+            if (playerChips.get(player) > 0) { // 只考慮仍然在遊戲中的玩家
+                List<PokerCard> allCards = new ArrayList<>(playerHands.get(player));
+                allCards.addAll(communityCards);
+                int score = calculateScore(allCards);
+                scores.put(player, score);
 
-            System.out.println(player + " 的手牌：" + playerHands.get(player));
-            System.out.println("公共牌：" + communityCards);
-            System.out.println("組合牌分數：" + score);
+                System.out.println(player + " 的手牌：" + playerHands.get(player));
+                System.out.println("公共牌：" + communityCards);
+                System.out.println("組合牌分數：" + score);
+            }
         }
 
         String winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
@@ -99,8 +105,8 @@ public class Texas extends CardGame {
 
     // 處理盲注
     private void placeBlinds() {
-        int smallBlindIndex = (dealerIndex + 1) % players.size();
-        int bigBlindIndex = (dealerIndex + 2) % players.size();
+        int smallBlindIndex = 0;
+        int bigBlindIndex = 1;
 
         String smallBlindPlayer = players.get(smallBlindIndex);
         String bigBlindPlayer = players.get(bigBlindIndex);
@@ -119,9 +125,16 @@ public class Texas extends CardGame {
         System.out.println("\n=== 開始一輪喊注 ===");
         Iterator<String> iterator = players.iterator();
         Scanner scanner = new Scanner(System.in);
+        List<String> activePlayers = new ArrayList<>(players); // 活躍玩家
 
-        while (iterator.hasNext()) {
-            String player = iterator.next();
+        while (!activePlayers.isEmpty()) {
+            String player = activePlayers.get(0);
+
+            if (playerChips.get(player) <= 0) {
+                System.out.println(player + " 沒有籌碼，跳過此玩家。");
+                activePlayers.remove(player);
+                continue;
+            }
 
             System.out.println("\n" + player + " 的回合！");
             System.out.println("你的手牌是：" + playerHands.get(player));
@@ -132,7 +145,9 @@ public class Texas extends CardGame {
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 1 -> System.out.println(player + " 選擇了跟注。");
+                case 1 -> {
+                    System.out.println(player + " 選擇了跟注。");
+                }
                 case 2 -> {
                     System.out.println("請輸入加注金額：");
                     int raise = scanner.nextInt();
@@ -146,10 +161,12 @@ public class Texas extends CardGame {
                 }
                 case 3 -> {
                     System.out.println(player + " 選擇了蓋牌。");
-                    iterator.remove();
+                    activePlayers.remove(player);
                 }
                 default -> System.out.println("無效的選擇，跳過此玩家。");
             }
+
+            activePlayers.remove(player); // 移動到下一個玩家
         }
     }
 }

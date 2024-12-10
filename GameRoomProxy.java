@@ -1,3 +1,7 @@
+/*****   學號：413226178、413226271         *****/
+/*****   姓名：楊茗翔、簡稔祖         *****/
+
+
 public class GameRoomProxy implements Room{
 
     GameRoom gameroom = new GameRoom();

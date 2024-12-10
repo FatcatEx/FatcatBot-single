@@ -1,15 +1,20 @@
+/*****   學號：413226178、413226271         *****/
+/*****   姓名：楊茗翔、簡稔祖         *****/
+
+
 import java.util.*;
 
 public class Blackjack extends CardGame {
     private final Map<String, List<PokerCard>> playerHands;
-    private final List<PokerCard> dealerHand;
+    private final Map<String, Boolean> playerStatus; // 玩家狀態，true 表示已停牌或爆牌
 
     public Blackjack(List<String> players) {
         super(players);
         this.playerHands = new HashMap<>();
-        this.dealerHand = new ArrayList<>();
+        this.playerStatus = new HashMap<>();
         for (String player : players) {
             playerHands.put(player, new ArrayList<>());
+            playerStatus.put(player, false); // 初始化為未停牌或爆牌
         }
     }
 
@@ -21,12 +26,14 @@ public class Blackjack extends CardGame {
 
     @Override
     protected void playRound() {
-        for (String player : players) {
-            List<PokerCard> hand = playerHands.get(player);
-            System.out.println(player + " 的手牌：" + hand);
+        while (!isGameOver()) {
+            for (String player : players) {
+                if (playerStatus.get(player)) continue; // 跳過已停牌或爆牌的玩家
 
-            while (true) {
+                List<PokerCard> hand = playerHands.get(player);
+                System.out.println(player + " 的手牌：" + hand);
                 System.out.println(player + " 的目前分數：" + calculateScore(hand));
+
                 System.out.println(player + "，你想要 (1) 要牌 還是 (2) 停牌？");
                 Scanner scanner = new Scanner(System.in);
                 String choice = scanner.nextLine();
@@ -34,45 +41,59 @@ public class Blackjack extends CardGame {
                 if (choice.equals("1")) {
                     hit(hand);
                     System.out.println(player + " 抽到了：" + hand.get(hand.size() - 1));
-                    if (calculateScore(hand) > 21) {
+                    int score = calculateScore(hand);
+                    System.out.println(player + " 的目前分數：" + score);
+
+                    if (score > 21) {
                         System.out.println(player + " 爆牌了！");
-                        break;
+                        playerStatus.put(player, true); // 爆牌視為回合結束
+                    } else if (score == 21) {
+                        System.out.println(player + " 達到 21 點！");
+                        playerStatus.put(player, true); // 自動停牌
                     }
                 } else if (choice.equals("2")) {
-                    break;
+                    playerStatus.put(player, true); // 選擇停牌
                 } else {
                     System.out.println("無效的選項！");
                 }
             }
         }
-
-        // 莊家回合
-        System.out.println("莊家的回合開始！");
-        while (calculateScore(dealerHand) < 17) {
-            hit(dealerHand);
-            System.out.println("莊家抽到了：" + dealerHand.get(dealerHand.size() - 1));
-        }
     }
 
     @Override
     protected boolean isGameOver() {
-        return true; // Blackjack 一局結束後即遊戲結束
+        // 當所有玩家都停牌或爆牌時，遊戲結束
+        return playerStatus.values().stream().allMatch(status -> status);
     }
 
     @Override
     protected void determineWinner() {
-        System.out.println("莊家的最終手牌：" + dealerHand + "，分數：" + calculateScore(dealerHand));
+        System.out.println("=== 遊戲結果 ===");
+        Map<String, Integer> scores = new HashMap<>();
         for (String player : players) {
             int playerScore = calculateScore(playerHands.get(player));
-            int dealerScore = calculateScore(dealerHand);
-            System.out.println(player + " 的最終分數：" + playerScore);
+            scores.put(player, playerScore);
+            System.out.println(player + " 的最終手牌：" + playerHands.get(player) + "，分數：" + playerScore);
+        }
 
-            if (playerScore > 21 || (dealerScore <= 21 && dealerScore > playerScore)) {
-                System.out.println(player + " 輸了！");
-            } else if (playerScore == dealerScore) {
-                System.out.println(player + " 平手！");
+        // 過濾有效分數（21 以下）
+        scores.entrySet().removeIf(entry -> entry.getValue() > 21);
+
+        if (scores.isEmpty()) {
+            System.out.println("所有玩家都爆牌了！");
+        } else {
+            int maxScore = Collections.max(scores.values());
+            List<String> winners = new ArrayList<>();
+            for (Map.Entry<String, Integer> entry : scores.entrySet()) {
+                if (entry.getValue() == maxScore) {
+                    winners.add(entry.getKey());
+                }
+            }
+
+            if (winners.size() == 1) {
+                System.out.println("贏家是：" + winners.get(0) + "，分數：" + maxScore);
             } else {
-                System.out.println(player + " 贏了！");
+                System.out.println("平局！贏家是：" + String.join(", ", winners) + "，分數：" + maxScore);
             }
         }
     }
@@ -106,8 +127,6 @@ public class Blackjack extends CardGame {
             playerHands.get(player).add(deck.remove(0));
             playerHands.get(player).add(deck.remove(0));
         }
-        dealerHand.add(deck.remove(0));
-        dealerHand.add(deck.remove(0));
     }
 
     private void hit(List<PokerCard> hand) {
