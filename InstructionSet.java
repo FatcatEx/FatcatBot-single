@@ -38,7 +38,7 @@ public class InstructionSet {
  
     private final RandomGenerator randomGenerator = new RandomGenerator();
     private final Note note = new Note();
-    private final GameRoom gameRoom = new GameRoom();
+    private final GameRoomProxy gameRoom = new GameRoomProxy();
     private final Alarm alarm = new Note();
 
     public void botSet() throws IOException{

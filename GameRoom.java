@@ -4,7 +4,7 @@
 
 import java.util.*;
 
-public class GameRoom {
+public class GameRoom implements Room{
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
     private final List<String> players; // 儲存玩家名稱
@@ -16,21 +16,15 @@ public class GameRoom {
     }
 
     // 加入房間
+    @Override
     public synchronized boolean joinRoom(String playerName) {
-        if (players.size() >= MAX_PLAYERS) {
-            System.out.println("房間已滿，無法加入！");
-            return false;
-        }
-        if (players.contains(playerName)) {
-            System.out.println("玩家已經在房間內！");
-            return false;
-        }
         players.add(playerName);
         System.out.println(playerName + " 加入了房間！");
         return true;
     }
 
     // 離開房間
+    @Override
     public synchronized boolean leaveRoom(String playerName) {
         if (players.remove(playerName)) {
             System.out.println(playerName + " 離開了房間！");
@@ -46,12 +40,16 @@ public class GameRoom {
         return players.size() >= MIN_PLAYERS && !isGameActive;
     }
 
+    public boolean isFull(){
+        return players.size() >= MAX_PLAYERS;
+    }
+
+    public boolean isExist(String playerName){
+        return players.contains(playerName);
+    }
+
     // 開始遊戲
     public void startGame(String gameType) {
-        if (!canStartGame()) {
-            System.out.println("玩家數不足或遊戲已經在進行中！");
-            return;
-        }
         isGameActive = true;
         System.out.println("遊戲開始！遊戲類型：" + gameType);
         if (gameType.equalsIgnoreCase(".blackjack")) {
