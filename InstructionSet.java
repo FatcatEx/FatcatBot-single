@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 
 public class InstructionSet {
+
+    //指令集
     public String[] Instruction = {
         ".r",
         ".rr",
@@ -21,6 +23,7 @@ public class InstructionSet {
         ".botoff"
     };
  
+    //指令集說明
     public String[] HelpIntrodution = {
         "擲骰指令 .rx (x為骰子面數，例如 .r6 將生成1-6之間的隨機數)",
         "輪盤指令 .rrx#y#z (x, y, z為事件名，例如 .rr吃飯#睡覺#玩遊戲)",
@@ -39,12 +42,13 @@ public class InstructionSet {
     private final RandomGenerator randomGenerator = new RandomGenerator();
     private final Note note = new Note();
     private final GameRoomProxy gameRoom = new GameRoomProxy();
-    private final Alarm alarm = new Note();
 
     public void botSet() throws IOException{
+        Alarm alarm = Alarm.getInstance();
         alarm.setAlarm();
     }
 
+    //接受指令後比對指令集內容，分別處理。
     public void ReceiveInstruction(String message) {
          int function = -1;
          
@@ -106,7 +110,8 @@ public class InstructionSet {
             }
 
             case 10 -> {
-                new Alarm().CreateAlarm();
+                Alarm alarm = Alarm.getInstance();
+                alarm.CreateAlarm();
             }
 
             case 11 ->{

@@ -15,11 +15,13 @@ public class LineBot extends InstructionSet {
         } catch (IOException e) {
         }
 
+        //循環執行以接受多次指令
         while (botRun) {
             linebot.handleInputEvent();
         }
     }
 
+    //處理輸入指令
     public void handleInputEvent() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("請輸入指令: ");

@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-public class Note extends Alarm {
+public class Note {
     String path = "D:/LineBotTXT/";
     public String CreateTXT(){
         Scanner scanner = new Scanner(System.in);

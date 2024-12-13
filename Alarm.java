@@ -19,7 +19,20 @@ public class Alarm {
      private int Alarmnum = 0;// 目前指向的鬧鐘編號
      private final List<Thread> virtualThreads = new ArrayList<>();
      String path = "D:/LineBotAlarm/AlarmSet";
+     private static Alarm instance;
+
+     //獲取Alarm的唯一實體
+     public static Alarm getInstance() {
+      if (instance == null) {
+         instance = new Alarm();
+     }
      
+     return instance;
+     }
+
+     //使得Alarm private化
+     private Alarm() {};
+
      //在打開linebot時讀取之前的鬧鐘信息
      public void setAlarm() throws IOException{
       // 時間格式
