@@ -25,7 +25,7 @@ public class GameRoom implements Room {
     // 離開房間
     @Override
     public boolean leaveRoom(String playerName) {
-            System.out.println(playerName + " 離開了房間！");
+            players.remove(playerName);
             return true;
     }
 
